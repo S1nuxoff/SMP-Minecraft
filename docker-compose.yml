@@ -16,9 +16,6 @@ services:
       ONLINE_MODE: "false"
       SPAWN_PROTECTION: "0"
       VIEW_DISTANCE: "10"
-      # Автоматически скачивает плагины при старте (ID с spiget.org)
-      # 6269 = AuthMe, 390 = Multiverse-Core
-      SPIGET_RESOURCES: "6269,390"
     volumes:
       - minecraft_data:/data
       - ./plugins:/data/plugins
