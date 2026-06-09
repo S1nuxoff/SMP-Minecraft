@@ -1,0 +1,16 @@
+[Unit]
+Description=Minecraft SMP Server
+After=network.target
+
+[Service]
+Type=simple
+User=minecraft
+WorkingDirectory=/opt/minecraft
+ExecStart=/opt/minecraft/start.sh
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:/opt/minecraft/logs/service.log
+StandardError=append:/opt/minecraft/logs/service.log
+
+[Install]
+WantedBy=multi-user.target
