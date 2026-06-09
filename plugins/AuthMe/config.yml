@@ -61,4 +61,5 @@ hooks:
         enable: false
 
 messages:
-  language: uk
+  messagesLanguage: uk
+  perPlayerLocale: false
