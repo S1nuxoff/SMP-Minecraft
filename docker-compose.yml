@@ -18,7 +18,7 @@ services:
       VIEW_DISTANCE: "10"
     volumes:
       - minecraft_data:/data
-      - ./plugins:/data/plugins
+      - ./plugins:/plugins
       - ./worlds/authlobby:/data/authlobby
     tty: true
     stdin_open: true
