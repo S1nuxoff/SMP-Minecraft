@@ -55,5 +55,10 @@ hooks:
     # Подзаголовок под ним
     - 'title %p subtitle {"text":"Надіюсь 2 тижні протягнемо","color":"white","italic":true}'
 
+  gui:
+    dialog:
+      preJoin:
+        enable: false
+
 messages:
   language: uk
