@@ -15,7 +15,7 @@ echo "[1/7] Installing Java 21..."
 apt-get update -y -q
 apt-get install -y -q openjdk-21-jre-headless git wget curl python3 python3-pip
 
-pip3 install nbtlib -q
+pip3 install nbtlib -q --break-system-packages
 
 # Minecraft user
 echo "[2/7] Creating minecraft user..."
@@ -23,27 +23,27 @@ useradd -r -m -U -d "$MC_DIR" -s /bin/false minecraft 2>/dev/null || true
 mkdir -p "$MC_DIR/plugins"
 mkdir -p "$MC_DIR/logs"
 
-# Clone repo
-echo "[3/7] Cloning config repo..."
-rm -rf /tmp/mc-setup
-git clone "$GIT_REPO" /tmp/mc-setup
-
-# Copy configs and service files
-cp /tmp/mc-setup/server.properties "$MC_DIR/"
-cp /tmp/mc-setup/eula.txt "$MC_DIR/"
-cp /tmp/mc-setup/start.sh "$MC_DIR/"
-cp /tmp/mc-setup/fix_gamerules.py "$MC_DIR/"
+# Copy configs (uploaded via scp by deploy.sh)
+echo "[3/7] Copying configs..."
+MC_CONFIG="/tmp/mc-setup"
+cp "$MC_CONFIG/server.properties" "$MC_DIR/"
+cp "$MC_CONFIG/eula.txt" "$MC_DIR/"
+cp "$MC_CONFIG/start.sh" "$MC_DIR/"
+cp "$MC_CONFIG/fix_gamerules.py" "$MC_DIR/"
 chmod +x "$MC_DIR/start.sh"
-cp -r /tmp/mc-setup/plugins/* "$MC_DIR/plugins/"
+cp -r "$MC_CONFIG/plugins/"* "$MC_DIR/plugins/"
 
-# Paper JAR
-echo "[4/7] Downloading Paper 26.1.2..."
-PAPER_BUILD=$(curl -s "https://api.papermc.io/v2/projects/paper/versions/26.1.2/builds" \
+# Paper JAR — get latest stable version dynamically
+echo "[4/7] Downloading Paper (latest stable)..."
+PAPER_VER=$(curl -s "https://api.papermc.io/v2/projects/paper" \
+  | python3 -c "import sys,json; d=json.load(sys.stdin); stable=[v for v in d['versions'] if '-pre' not in v and '-rc' not in v]; print(stable[-1])")
+echo "  Version: $PAPER_VER"
+PAPER_BUILD=$(curl -s "https://api.papermc.io/v2/projects/paper/versions/$PAPER_VER/builds" \
   | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['builds'][-1]['build'])")
-PAPER_FILE=$(curl -s "https://api.papermc.io/v2/projects/paper/versions/26.1.2/builds/$PAPER_BUILD" \
+PAPER_FILE=$(curl -s "https://api.papermc.io/v2/projects/paper/versions/$PAPER_VER/builds/$PAPER_BUILD" \
   | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['downloads']['application']['name'])")
 wget -q -O "$MC_DIR/paper.jar" \
-  "https://api.papermc.io/v2/projects/paper/versions/26.1.2/builds/$PAPER_BUILD/downloads/$PAPER_FILE"
+  "https://api.papermc.io/v2/projects/paper/versions/$PAPER_VER/builds/$PAPER_BUILD/downloads/$PAPER_FILE"
 
 # Plugin JARs
 echo "[5/7] Downloading plugins..."
