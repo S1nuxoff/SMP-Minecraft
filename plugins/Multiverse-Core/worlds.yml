@@ -1,0 +1,11 @@
+worlds:
+  authlobby:
+    environment: NORMAL
+    generator: DEFAULT
+    gameMode: ADVENTURE
+    pvp: false
+    allowMonsters: false
+    allowAnimals: false
+    autoLoad: true
+    bedRespawn: false
+    hidden: true

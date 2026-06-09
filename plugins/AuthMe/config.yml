@@ -1,0 +1,59 @@
+DataSource:
+  # Тип хранилища: SQLite (локально) или MySQL (внешняя БД)
+  backend: SQLite
+
+settings:
+  registration:
+    # Обязательная регистрация
+    enabled: true
+    # Метод: PASSWORD (пароль) или EMAIL
+    registrationMethod: PASSWORD
+    # Принудительно показывать сообщение о регистрации
+    forceRegister: true
+    # Таймаут на регистрацию (секунды), 0 = без ограничений
+    timeout: 30
+    # Максимум аккаунтов с одного IP
+    maxRegistrationPerIp: 3
+    messageInterval: 5
+
+  restrictions:
+    # Запрещать движение до авторизации
+    allowMovement: false
+    # Запрещать команды до авторизации (кроме /login /register)
+    allowedCommands:
+      - /login
+      - /l
+      - /reg
+      - /register
+    # Таймаут на вход (секунды)
+    timeout: 30
+    # Телепортировать незалогиненых игроков в точку спауна лобби
+    teleportUnAuthedToSpawn: true
+
+  spawn:
+    # После логина — телепортировать на основной спавн или последнюю позицию
+    teleportToSpawnAfterLogin: false
+    # Приоритет поиска спавна: сначала AuthMe, потом Multiverse
+    spawnPriority: authme_first_spawn,first_spawn,spawn,multiverse
+
+  security:
+    # Минимальная длина пароля
+    minPasswordLength: 5
+    # Максимальная длина пароля
+    maxPasswordLength: 30
+    # Алгоритм хеширования
+    passwordHash: BCRYPT
+    # Запомнить последний IP для быстрого входа
+    sessionExpireTime: 0
+
+hooks:
+  login:
+    # Сначала задаём тайминг (fadeIn=20, stay=80, fadeOut=20 тиков)
+    - 'title %p times 20 80 20'
+    # Большой заголовок по центру экрана
+    - 'title %p title {"text":"Ласкаво просимо!","color":"gold","bold":true}'
+    # Подзаголовок под ним
+    - 'title %p subtitle {"text":"Надіюсь 2 тижні протягнемо","color":"white","italic":true}'
+
+messages:
+  language: uk
